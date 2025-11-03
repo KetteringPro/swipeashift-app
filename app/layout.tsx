@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import Link from 'next/link';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -36,10 +37,32 @@ export default function RootLayout({
       <head>
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon_32x32.png" />
       </head>
-      <body className={`${inter.className}`}>
-        <div className="min-h-screen bg-gradient-to-b from-[#0d9488] to-white">
-          {children}
-        </div>
+      <body className={`${inter.className} relative font-sans bg-gradient-to-b from-[#0d9488] to-white min-h-screen flex flex-col`}>
+        {/* Top Navigation */}
+        <nav className="absolute top-0 left-0 right-0 flex justify-between items-center px-8 py-4 text-sm font-medium text-white z-50">
+          <Link href="/" className="tracking-wide font-semibold text-white">SwipeAShift</Link>
+        </nav>
+
+        {/* Main Page Content */}
+        <main className="flex-grow mt-16">
+          <div className="min-h-screen bg-gradient-to-b from-[#0d9488] to-white">
+            {children}
+          </div>
+        </main>
+
+        {/* Footer */}
+        <footer className="bg-white/80 text-gray-600 text-sm py-6 mt-16">
+          <div className="max-w-5xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <p>© 2025 SwipeAShift LLC | compliance@swipeashift.com</p>
+            <div className="flex space-x-4">
+              <Link href="/mission" className="hover:text-teal-700">Mission</Link>
+              <Link href="/about" className="hover:text-teal-700">About</Link>
+              <Link href="/legal" className="hover:text-teal-700">Legal</Link>
+              <Link href="/tip-transparency" className="hover:text-teal-700">Tip Policy</Link>
+              <Link href="/privacy" className="hover:text-teal-700">Privacy</Link>
+            </div>
+          </div>
+        </footer>
       </body>
     </html>
   );
