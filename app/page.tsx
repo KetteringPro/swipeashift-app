@@ -29,6 +29,16 @@ export default function ComingSoon() {
           </div>
         </div>
 
+        {/* Get Started Button */}
+        <div className="mb-6 sm:mb-8">
+          <a
+            href="/get-started"
+            className="inline-block bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-10 py-4 rounded-lg font-bold text-lg sm:text-xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
+          >
+            Get Started Now →
+          </a>
+        </div>
+
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-3 sm:mb-4 text-slate-800 px-4 max-w-6xl mx-auto">
           Revolutionizing the service industry — one shift at a time.
         </h1>

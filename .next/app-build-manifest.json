@@ -1,45 +1,50 @@
 {
   "pages": {
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
-    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/about/page": [
+    "/employer/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/about/page.js"
+      "static/chunks/app/employer/dashboard/page.js"
     ],
-    "/legal/page": [
+    "/employer/shifts/[id]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/legal/page.js"
+      "static/chunks/app/employer/shifts/[id]/page.js"
     ],
-    "/tip-transparency/page": [
+    "/employer/post-shift/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/tip-transparency/page.js"
+      "static/chunks/app/employer/post-shift/page.js"
     ],
-    "/privacy/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/privacy/page.js"
+      "static/chunks/app/page.js"
     ],
-    "/mission/page": [
+    "/get-started/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/mission/page.js"
+      "static/chunks/app/get-started/page.js"
     ],
-    "/terms/page": [
+    "/auth/worker/signin/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/terms/page.js"
+      "static/chunks/app/auth/worker/signin/page.js"
+    ],
+    "/swipe/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/swipe/page.js"
+    ],
+    "/dashboard/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/dashboard/page.js"
     ]
   }
 }

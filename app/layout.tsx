@@ -2,6 +2,8 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
+import Navigation from '@/components/Navigation'
+
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -39,9 +41,8 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} relative font-sans bg-gradient-to-b from-[#0d9488] to-white min-h-screen flex flex-col`}>
         {/* Top Navigation */}
-        <nav className="absolute top-0 left-0 right-0 flex justify-between items-center px-8 py-4 text-sm font-medium text-white z-50">
-          <Link href="/" className="tracking-wide font-semibold text-white">SwipeAShift</Link>
-        </nav>
+    
+        <Navigation />
 
         {/* Main Page Content */}
         <main className="flex-grow mt-16">

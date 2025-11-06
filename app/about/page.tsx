@@ -11,37 +11,65 @@ export default function AboutPage() {
         <div className="md:flex md:items-start md:gap-10 bg-white/80 rounded-2xl p-8 shadow-lg backdrop-blur">
           <div className="md:w-2/3 text-gray-800 leading-relaxed space-y-6">
             <p>
-              SwipeAShift was built by someone who’s lived every side of the service industry.
-              Founder <strong>Christy Kettering</strong> combines a background in restaurant operations,
-              workers’ compensation analytics, and business strategy to bring fresh, practical
-              innovation to hospitality staffing.
+              <strong>Christy Kettering</strong> didn't know she was related to Charles F. Kettering — 
+              inventor of the automobile self-starter, holder of 140 patents, and pioneer of point-of-sale 
+              systems at National Cash Register — until 2019, when her estranged father told her in one of 
+              their last conversations before his death in 2020.
             </p>
 
             <p>
-              Christy’s journey began at Liberty Mutual, where she started as a temporary administrative
-              employee and was handed a stack of folders to troubleshoot why workers’ compensation
-              premiums weren’t calculating correctly. With just fifteen minutes of training, she
-              identified the logic errors and explained the fixes — launching her career as a lead
-              Ratabase analyst writing the formulas behind Liberty Mutual’s national premium systems.
+              What shocked her was the parallel. Charles revolutionized retail and payment systems in the 
+              early 1900s. Christy had unknowingly spent 20 years building enterprise technology for retail 
+              and eCommerce — the exact work her famous ancestor had done a century earlier.
             </p>
 
             <p>
-              While building her tech and insurance career, Christy co-owned and operated restaurants
-              with her late brother and a former partner — working nights in hospitality while pursuing
-              her MBA in Business Management. Those experiences gave her a ground-level understanding of
-              how unpredictable staffing can impact small business success.
+              <em>Nature versus nurture? She still doesn't know. But she knows this: Ketterings solve 
+              impossible problems.</em>
             </p>
 
             <p>
-              By 2006, she stepped away from restaurant ownership but carried forward the lessons
-              learned about leadership, resilience, and the power of systems that actually work.
-              SwipeAShift combines that empathy with her technical expertise — a platform built by
-              someone who’s lived the chaos it now solves.
+              Christy's career began at Liberty Mutual, where as a temp employee she was handed a stack of 
+              folders and asked to troubleshoot why workers' compensation premiums weren't calculating 
+              correctly. With just fifteen minutes of training, she identified the logic errors — launching 
+              her career as a lead Ratabase analyst writing the formulas behind Liberty Mutual's national 
+              Workers' Comp systems.
             </p>
 
-            <p className="italic text-gray-600 mt-6 border-t border-gray-300 pt-4">
-              “I didn’t set out to build an app — I set out to fix the problem that’s been breaking
-              small businesses for decades.”<br />
+            <p>
+              She went on to build enterprise systems for VF Corporation (Timberland, The North Face, Vans), 
+              Hitachi Vantara in Silicon Valley, and luxury fashion conglomerate Capri Holdings (Michael Kors, 
+              Versace, Jimmy Choo). Most recently, she served as a strategic consultant managing data for 
+              Capri's proposed $8.5 billion acquisition by Tapestry and designing a $90 million IT investment 
+              strategy.
+            </p>
+
+            <p>
+              But before all that — while pursuing her MBA in Business Management — Christy co-owned and 
+              operated The Blue Claw restaurant on Portsmouth's waterfront with her late brother Ben Harris. 
+              They worked 80-hour weeks trying to solve staffing through phone trees and whoever they could 
+              reach through their personal networks. When you can't staff for a week, customers move on. 
+              The business didn't fail. The staffing system did.
+            </p>
+
+            <p>
+              Ben died in a 2012 brewery accident that led to new workplace safety regulations. Her father 
+              died in 2020. SwipeAShift honors both of them.
+            </p>
+
+            <p>
+              After leaving Capri in 2025, Christy returned to Portsmouth to build what she and Ben needed 
+              at The Blue Claw: a staffing system that actually works for small businesses.
+            </p>
+
+            <p className="font-medium text-gray-700 mt-6 border-t border-gray-300 pt-4">
+              Charles F. Kettering once said: <em>"My interest is in the future because I am going to spend 
+              the rest of my life there."</em>
+            </p>
+
+            <p className="italic text-gray-600">
+              "Restaurant workers deserve better systems. I'm building what Ben and I needed."
+              <br />
               <span className="text-gray-500">— Christy Kettering, Founder</span>
             </p>
           </div>

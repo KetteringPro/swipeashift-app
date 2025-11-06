@@ -1,7 +1,8 @@
 {
-  "/about/page": "app/about/page.js",
-  "/legal/page": "app/legal/page.js",
   "/page": "app/page.js",
-  "/mission/page": "app/mission/page.js",
-  "/tip-transparency/page": "app/tip-transparency/page.js"
+  "/auth/worker/signin/page": "app/auth/worker/signin/page.js",
+  "/employer/dashboard/page": "app/employer/dashboard/page.js",
+  "/employer/post-shift/page": "app/employer/post-shift/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/swipe/page": "app/swipe/page.js"
 }
