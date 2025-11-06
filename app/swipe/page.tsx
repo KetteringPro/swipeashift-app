@@ -1,95 +1,140 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { SwipeCard } from '@/components/SwipeCard'
-import type { ShiftCardData, SwipeDirection } from '@/types/database.types'
 import { createClient } from '@/lib/supabase/client'
+import { useRouter } from 'next/navigation'
+import { calculateWorkerRate } from '@/lib/utils/calculateWorkerRate'
 
-export default function SwipeShiftsPage() {
-  const [shifts, setShifts] = useState<ShiftCardData[]>([])
+interface Restaurant {
+  id: string
+  name: string
+  city: string
+  state: string
+  reliability_score: number
+}
+
+interface Shift {
+  id: string
+  role: string
+  date: string
+  start_time: string
+  end_time: string
+  hourly_rate_min: number
+  hourly_rate_max: number
+  positions_open: number
+  max_workers: number
+  description: string | null
+  requirements: string | null
+  restaurant: Restaurant
+}
+
+interface ShiftWithRate extends Shift {
+  calculated_rate: number
+  boost_description: string
+}
+
+export default function SwipePage() {
+  const [shifts, setShifts] = useState<ShiftWithRate[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  
-  const supabase = createClient()
-  const currentShift = shifts[currentIndex]
+  const [workerId, setWorkerId] = useState<string | null>(null)
+  const [isApplying, setIsApplying] = useState(false)
 
-  // Load shifts on mount
+  const supabase = createClient()
+  const router = useRouter()
+
   useEffect(() => {
-    loadShifts()
+    loadShiftsAndWorker()
   }, [])
 
-  // Preload next batch when running low
-  useEffect(() => {
-    if (shifts.length - currentIndex <= 3) {
-      loadMoreShifts()
-    }
-  }, [currentIndex, shifts.length])
-
-  const loadShifts = async () => {
+  const loadShiftsAndWorker = async () => {
     setIsLoading(true)
     setError(null)
-    
+
     try {
-      // TEMPORARY: Bypass auth for testing
-      // Get the first worker from database
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        router.push('/auth/worker/signin')
+        return
+      }
+
+      // Get worker profile
       const { data: worker, error: workerError } = await supabase
         .from('workers')
-        .select('id, location, max_commute_miles, city, state')
-        .limit(1)
-        .maybeSingle()
-      
+        .select('id')
+        .eq('auth_id', user.id)
+        .single()
+
       if (workerError) throw workerError
       if (!worker) throw new Error('Worker profile not found')
 
-      // Get shifts already swiped on
-      const { data: swipedShifts, error: swipesError } = await supabase
-        .from('shift_swipes')
-        .select('shift_id')
-        .eq('worker_id', worker.id)
-      
-      if (swipesError) throw swipesError
+      setWorkerId(worker.id)
 
-      const swipedShiftIds = swipedShifts?.map(s => s.shift_id) || []
-
-      // Fetch available shifts
-      let query = supabase
+      // Fetch open shifts
+      const { data: shiftsData, error: shiftsError } = await supabase
         .from('shifts')
         .select(`
-          *,
-          restaurant:restaurants!inner (
+          id,
+          role,
+          date,
+          start_time,
+          end_time,
+          hourly_rate_min,
+          hourly_rate_max,
+          positions_open,
+          max_workers,
+          description,
+          requirements,
+          restaurant:restaurants (
             id,
             name,
             city,
             state,
-            location,
             reliability_score
           )
         `)
         .eq('status', 'OPEN')
-        .gte('date', new Date().toISOString().split('T')[0]) // Today or later
+        .gte('date', new Date().toISOString().split('T')[0])
         .order('date', { ascending: true })
-        .order('start_time', { ascending: true })
-        .limit(20)
-
-      // Exclude already swiped shifts
-      if (swipedShiftIds.length > 0) {
-        query = query.not('id', 'in', `(${swipedShiftIds.join(',')})`)
-      }
-
-      const { data: shiftsData, error: shiftsError } = await query
 
       if (shiftsError) throw shiftsError
 
-      // Format the data
-      const formattedShifts: ShiftCardData[] = (shiftsData || []).map(shift => ({
-        ...shift,
-        restaurant: shift.restaurant,
-        distance_miles: calculateDistance(worker, shift.restaurant)
-      }))
+      // Filter out shifts already applied to
+      const { data: applications } = await supabase
+        .from('shift_applications')
+        .select('shift_id')
+        .eq('worker_id', worker.id)
 
-      setShifts(formattedShifts)
-      
+      const appliedShiftIds = new Set(applications?.map(a => a.shift_id) || [])
+      const availableShifts = (shiftsData || []).filter(shift => !appliedShiftIds.has(shift.id))
+
+      // Calculate rates for each shift
+      const shiftsWithRates = await Promise.all(
+        availableShifts.map(async (shift) => {
+          // Get application counts for demand calculation
+          const { data: appData } = await supabase
+            .from('shift_applications')
+            .select('status')
+            .eq('shift_id', shift.id)
+
+          const pending = appData?.filter(a => a.status === 'PENDING').length || 0
+          const accepted = appData?.filter(a => a.status === 'ACCEPTED').length || 0
+
+          // Calculate worker rate in real-time
+          const rateCalc = calculateWorkerRate(shift, { pending, accepted })
+
+          return {
+            ...shift,
+            calculated_rate: rateCalc.workerRate,
+            boost_description: rateCalc.reason.join(' + ') || 'Standard rate'
+          }
+        })
+      )
+
+      setShifts(shiftsWithRates)
+
     } catch (err: any) {
       console.error('Error loading shifts:', err)
       setError(err.message || 'Failed to load shifts')
@@ -98,139 +143,76 @@ export default function SwipeShiftsPage() {
     }
   }
 
-  const loadMoreShifts = async () => {
-    // Similar to loadShifts but append to existing
-    // Implementation would fetch next page
-    console.log('Loading more shifts...')
-  }
+  const handleSwipe = async (direction: 'left' | 'right') => {
+    if (!workerId || currentIndex >= shifts.length || isApplying) return
 
-  const calculateDistance = (worker: any, restaurant: any): number | undefined => {
-    // Simplified distance calculation
-    // In production, use PostGIS ST_Distance
-    if (!worker.city || !restaurant.city) return undefined
-    if (worker.city === restaurant.city) return 5 // Same city approximation
-    return 15 // Different city approximation
-  }
+    const currentShift = shifts[currentIndex]
 
-  const handleSwipe = async (direction: SwipeDirection) => {
-    if (!currentShift) return
+    // Record swipe
+    await supabase
+      .from('shift_swipes')
+      .insert({
+        worker_id: workerId,
+        shift_id: currentShift.id,
+        direction: direction
+      })
 
-    try {
-      // TEMPORARY: Use first worker for testing
-      const { data: worker } = await supabase
-        .from('workers')
-        .select('id')
-        .limit(1)
-        .maybeSingle()
-
-      if (!worker) throw new Error('Worker profile not found')
-
-      // Calculate swipe context
-      const swipeContext = {
-        distance_miles: currentShift.distance_miles,
-        pay_rate: currentShift.pay_rate,
-        time_to_start: calculateTimeToStart(currentShift)
-      }
-
-      // Record the swipe
-      const { error: swipeError } = await supabase
-        .from('shift_swipes')
-        .insert({
-          worker_id: worker.id,
-          shift_id: currentShift.id,
-          direction,
-          swipe_context: swipeContext
-        })
-
-      if (swipeError) throw swipeError
-
-      // The trigger will automatically create application if right/up swipe
+    // If swiping right, create application with LOCKED RATE
+    if (direction === 'right') {
+      setIsApplying(true)
       
-      // Show feedback
-      if (direction === 'right' || direction === 'up') {
-        console.log('Applied to shift!', direction === 'up' ? '(Priority)' : '')
-      }
+      try {
+        const { error: applyError } = await supabase
+          .from('shift_applications')
+          .insert({
+            shift_id: currentShift.id,
+            worker_id: workerId,
+            status: 'PENDING',
+            source: 'swipe',
+            locked_rate: currentShift.calculated_rate  // LOCK THE RATE!
+          })
 
-    } catch (err: any) {
-      console.error('Error recording swipe:', err)
-      setError(err.message)
+        if (applyError) throw applyError
+
+        // Show success message briefly
+        alert(`Applied! Rate locked at $${currentShift.calculated_rate}/hr`)
+
+      } catch (err: any) {
+        console.error('Error applying:', err)
+        alert(`Error: ${err.message}`)
+      } finally {
+        setIsApplying(false)
+      }
     }
+
+    // Move to next shift
+    setCurrentIndex(currentIndex + 1)
   }
 
-  const calculateTimeToStart = (shift: ShiftCardData): number => {
-    const shiftDateTime = new Date(`${shift.date}T${shift.start_time}`)
-    const now = new Date()
-    const hoursToStart = (shiftDateTime.getTime() - now.getTime()) / (1000 * 60 * 60)
-    return Math.round(hoursToStart)
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr)
+    return date.toLocaleDateString('en-US', { 
+      weekday: 'long', 
+      month: 'long', 
+      day: 'numeric',
+      year: 'numeric'
+    })
   }
 
-  const handleSwipeComplete = () => {
-    // Move to next card
-    setCurrentIndex(prev => prev + 1)
-  }
-
-  const handleUndo = async () => {
-    if (currentIndex === 0) return // Can't undo if we're at the first card
-
-    try {
-      // Get the previous shift
-      const previousShift = shifts[currentIndex - 1]
-      if (!previousShift) return
-
-      // Get worker
-      const { data: worker } = await supabase
-        .from('workers')
-        .select('id')
-        .limit(1)
-        .maybeSingle()
-
-      if (!worker) {
-        console.error('Worker not found for undo')
-        return
-      }
-
-      // Delete the swipe record
-      const { error: deleteSwipeError } = await supabase
-        .from('shift_swipes')
-        .delete()
-        .eq('worker_id', worker.id)
-        .eq('shift_id', previousShift.id)
-
-      if (deleteSwipeError) {
-        console.error('Error deleting swipe:', deleteSwipeError)
-        return
-      }
-
-      // Delete any application that was created (trigger handles this automatically via CASCADE)
-      // But we'll explicitly delete to be sure
-      const { error: deleteAppError } = await supabase
-        .from('shift_applications')
-        .delete()
-        .eq('worker_id', worker.id)
-        .eq('shift_id', previousShift.id)
-
-      if (deleteAppError) {
-        console.error('Error deleting application:', deleteAppError)
-        // Don't return - the swipe is already deleted, so we can still undo
-      }
-
-      // Move back to previous card
-      setCurrentIndex(prev => prev - 1)
-      
-      console.log('Undo successful - swipe deleted')
-
-    } catch (err: any) {
-      console.error('Error in undo:', err)
-      setError('Failed to undo swipe')
-    }
+  const formatTime = (timeStr: string) => {
+    const [hours, minutes] = timeStr.split(':')
+    const hour = parseInt(hours)
+    const ampm = hour >= 12 ? 'PM' : 'AM'
+    const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour
+    return `${displayHour}:${minutes} ${ampm}`
   }
 
   // Loading state
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-teal-50 to-green-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-teal-600 mx-auto mb-4"></div>
           <p className="text-gray-600 text-lg">Loading shifts...</p>
         </div>
       </div>
@@ -240,14 +222,14 @@ export default function SwipeShiftsPage() {
   // Error state
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-teal-50 to-green-50 p-4">
         <div className="bg-white rounded-lg shadow-lg p-8 max-w-md text-center">
           <div className="text-red-500 text-5xl mb-4">⚠️</div>
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Oops!</h2>
           <p className="text-gray-600 mb-4">{error}</p>
           <button
-            onClick={loadShifts}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            onClick={loadShiftsAndWorker}
+            className="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition"
           >
             Try Again
           </button>
@@ -256,144 +238,172 @@ export default function SwipeShiftsPage() {
     )
   }
 
-  // No more shifts
-  if (!currentShift) {
+  // No shifts available
+  if (shifts.length === 0) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-teal-50 to-green-50 p-4">
         <div className="bg-white rounded-lg shadow-lg p-8 max-w-md text-center">
           <div className="text-6xl mb-4">🎉</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            You've Seen All Available Shifts!
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">All caught up!</h2>
           <p className="text-gray-600 mb-4">
-            Check back later for new opportunities, or view your applications.
+            You've seen all available shifts. Check back later for new opportunities!
           </p>
-          <div className="space-y-2">
-            <button
-              onClick={loadShifts}
-              className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
-            >
-              Refresh Shifts
-            </button>
-            <button
-              onClick={() => window.location.href = '/dashboard'}
-              className="w-full px-6 py-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition font-medium"
-            >
-              View My Applications
-            </button>
-          </div>
+          <button
+            onClick={() => router.push('/dashboard')}
+            className="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition"
+          >
+            View My Applications
+          </button>
         </div>
       </div>
     )
   }
 
-  // Main swipe interface
+  // All shifts swiped
+  if (currentIndex >= shifts.length) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-teal-50 to-green-50 p-4">
+        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md text-center">
+          <div className="text-6xl mb-4">✅</div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">No more shifts!</h2>
+          <p className="text-gray-600 mb-4">
+            You've reviewed all available shifts for now.
+          </p>
+          <button
+            onClick={() => router.push('/dashboard')}
+            className="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition"
+          >
+            View My Applications
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  const currentShift = shifts[currentIndex]
+
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-green-50 flex items-center justify-center p-4">
       
       {/* Header */}
-      <header className="max-w-md mx-auto mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">
-          🌊 SwipeAShift
-        </h1>
-        <div className="text-sm text-gray-600">
+      <div className="absolute top-0 left-0 right-0 p-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-teal-700">🍽️ SwipeAShift</h1>
+        </div>
+        <div className="text-gray-600 font-medium">
           {shifts.length - currentIndex} shifts remaining
         </div>
-      </header>
+      </div>
 
-      {/* Swipe Card Stack */}
-      <div className="relative max-w-md mx-auto" style={{ height: '600px' }}>
-        
-        {/* Next cards (stack preview) */}
-        {shifts.slice(currentIndex + 1, currentIndex + 3).map((shift, index) => (
-          <div
-            key={shift.id}
-            className="absolute w-full h-full"
-            style={{
-              zIndex: -index - 1,
-              transform: `scale(${1 - (index + 1) * 0.05}) translateY(${(index + 1) * -10}px)`,
-              opacity: 1 - (index + 1) * 0.3
-            }}
-          >
-            <div className="w-full h-full bg-white rounded-2xl shadow-lg"></div>
+      {/* Shift Card */}
+      <div className="w-full max-w-md mt-16">
+        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+          
+          {/* Card Header */}
+          <div className="bg-gradient-to-r from-teal-600 to-blue-600 p-6 text-white">
+            <h2 className="text-3xl font-bold mb-2">{currentShift.role}</h2>
+            <p className="text-lg opacity-90">{currentShift.restaurant.name}</p>
+            <p className="text-sm opacity-75">
+              {currentShift.restaurant.city}, {currentShift.restaurant.state}
+            </p>
           </div>
-        ))}
 
-        {/* Current card */}
-        {currentShift && (
-          <SwipeCard
-            key={currentShift.id}
-            shift={currentShift}
-            onSwipe={handleSwipe}
-            onSwipeComplete={handleSwipeComplete}
-          />
-        )}
+          {/* Card Body */}
+          <div className="p-6">
+            
+            {/* Date & Time */}
+            <div className="mb-4">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-2xl">📅</span>
+                <span className="font-semibold text-gray-800">{formatDate(currentShift.date)}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">⏰</span>
+                <span className="font-semibold text-gray-800">
+                  {formatTime(currentShift.start_time)} - {formatTime(currentShift.end_time)}
+                </span>
+              </div>
+            </div>
+
+            {/* CALCULATED RATE - This is what worker sees */}
+            <div className="bg-gradient-to-r from-green-50 to-teal-50 border-2 border-green-300 rounded-lg p-4 mb-4">
+              <div className="text-sm text-gray-600 font-medium mb-1">Your Hourly Rate</div>
+              <div className="text-4xl font-bold text-green-700">
+                ${currentShift.calculated_rate}/hr
+              </div>
+              {currentShift.boost_description && currentShift.boost_description !== 'Standard rate' && (
+                <div className="text-xs text-green-600 mt-2 font-medium">
+                  🔥 {currentShift.boost_description}
+                </div>
+              )}
+            </div>
+
+            {/* Restaurant Rating */}
+            <div className="mb-4">
+              <div className="text-sm text-gray-600 mb-1">Restaurant Rating:</div>
+              <div className="flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-yellow-400">⭐</span>
+                ))}
+                <span className="ml-2 text-gray-700 font-semibold">
+                  {currentShift.restaurant.reliability_score.toFixed(1)}
+                </span>
+              </div>
+            </div>
+
+            {/* Description */}
+            {currentShift.description && (
+              <div className="mb-4">
+                <div className="text-sm text-gray-600 font-medium mb-1">Details:</div>
+                <p className="text-gray-700">{currentShift.description}</p>
+              </div>
+            )}
+
+            {/* Requirements */}
+            {currentShift.requirements && (
+              <div className="mb-4">
+                <div className="text-sm text-gray-600 font-medium mb-1">Requirements:</div>
+                <p className="text-gray-700">{currentShift.requirements}</p>
+              </div>
+            )}
+
+            {/* Positions */}
+            <div className="text-sm text-gray-600">
+              {currentShift.positions_open} position{currentShift.positions_open !== 1 ? 's' : ''} available
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-4 p-6 bg-gray-50 border-t">
+            <button
+              onClick={() => handleSwipe('left')}
+              disabled={isApplying}
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-red-500 hover:bg-red-600 text-white rounded-lg font-bold text-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span className="text-2xl">👈</span>
+              <span>Pass</span>
+            </button>
+
+            <button
+              onClick={() => handleSwipe('right')}
+              disabled={isApplying}
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-green-500 hover:bg-green-600 text-white rounded-lg font-bold text-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isApplying ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  <span>Applying...</span>
+                </>
+              ) : (
+                <>
+                  <span>Apply</span>
+                  <span className="text-2xl">👍</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
       </div>
-
-      {/* Action Buttons (alternative to swipe) */}
-      <div className="max-w-md mx-auto mt-6 flex items-center justify-center gap-4">
-        
-        {/* Undo */}
-        {currentIndex > 0 && (
-          <button
-            onClick={handleUndo}
-            className="p-4 bg-yellow-500 hover:bg-yellow-600 text-white rounded-full shadow-lg transition-transform hover:scale-110"
-            title="Undo"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
-            </svg>
-          </button>
-        )}
-
-        {/* Pass */}
-        <button
-          onClick={() => {
-            handleSwipe('left')
-            handleSwipeComplete()
-          }}
-          className="p-5 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg transition-transform hover:scale-110"
-          title="Pass"
-        >
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-
-        {/* Super Like */}
-        <button
-          onClick={() => {
-            handleSwipe('up')
-            handleSwipeComplete()
-          }}
-          className="p-5 bg-blue-500 hover:bg-blue-600 text-white rounded-full shadow-lg transition-transform hover:scale-110"
-          title="Priority Apply"
-        >
-          <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-          </svg>
-        </button>
-
-        {/* Like */}
-        <button
-          onClick={() => {
-            handleSwipe('right')
-            handleSwipeComplete()
-          }}
-          className="p-5 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg transition-transform hover:scale-110"
-          title="Apply"
-        >
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-        </button>
-      </div>
-
-      {/* Tips */}
-      <div className="max-w-md mx-auto mt-8 text-center text-sm text-gray-500">
-        <p>👈 Swipe left to pass • 👉 Swipe right to apply • 👆 Swipe up for priority</p>
-      </div>
-
     </div>
   )
 }

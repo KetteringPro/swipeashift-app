@@ -1,8 +1,1 @@
-{
-  "/page": "app/page.js",
-  "/auth/worker/signin/page": "app/auth/worker/signin/page.js",
-  "/employer/dashboard/page": "app/employer/dashboard/page.js",
-  "/employer/post-shift/page": "app/employer/post-shift/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/swipe/page": "app/swipe/page.js"
-}
+{}
