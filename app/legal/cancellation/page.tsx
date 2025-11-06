@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function CancellationPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#0f9ea5] via-[#33b5b9] to-[#b1e4e8] flex justify-center items-start">
+    <main className="min-h-screen bg-gradient-to-br from-teal-600 via-teal-500 to-teal-200 flex justify-center items-start">
       <div className="max-w-5xl w-full mx-auto px-8 py-16">
         <h1 className="text-4xl font-bold text-white mb-6 border-b border-white/30 pb-2">
           Cancellation & Refund Policy
@@ -29,7 +29,7 @@ export default function CancellationPage() {
                 
                 <div className="space-y-3 text-sm">
                   <div>
-                    <p className="font-semibold text-green-700">✅ >24 hours before shift</p>
+                    <p className="font-semibold text-green-700">✅ &gt;24 hours before shift</p>
                     <p className="text-xs">FREE - Cancel anytime, no penalty</p>
                   </div>
 
@@ -39,565 +39,213 @@ export default function CancellationPage() {
                   </div>
 
                   <div>
-                    <p className="font-semibold text-orange-700">💵 <2 hours before</p>
+                    <p className="font-semibold text-orange-700">💵 &lt;2 hours before</p>
                     <p className="text-xs">PENALTY - $25 or 1 hour of pay (whichever is greater)</p>
                   </div>
 
                   <div>
                     <p className="font-semibold text-red-700">🚫 No-show</p>
-                    <p className="text-xs">SEVERE - 30-day suspension + $50 penalty. Second = permanent ban</p>
+                    <p className="text-xs">SEVERE - 30-day suspension + $50 penalty</p>
                   </div>
 
                   <div>
                     <p className="font-semibold text-purple-700">🏥 Emergency</p>
-                    <p className="text-xs">EXCUSED - With documentation within 24 hours</p>
+                    <p className="text-xs">Contact support immediately - case-by-case review</p>
                   </div>
                 </div>
               </div>
 
-              {/* Venue Cancellations */}
-              <div className="bg-green-50 p-4 rounded border border-green-300">
-                <p className="font-semibold text-green-900 mb-3">🏢 VENUE CANCELLATIONS</p>
+              {/* Employer Cancellations */}
+              <div className="bg-orange-50 p-4 rounded border border-orange-300">
+                <p className="font-semibold text-orange-900 mb-3">🏢 EMPLOYER CANCELLATIONS</p>
                 
                 <div className="space-y-3 text-sm">
                   <div>
-                    <p className="font-semibold text-green-700">✅ >24 hours before shift</p>
-                    <p className="text-xs">FREE - Full refund, no penalty</p>
+                    <p className="font-semibold text-green-700">✅ &gt;24 hours before shift</p>
+                    <p className="text-xs">FREE - Cancel anytime, full refund</p>
                   </div>
 
                   <div>
-                    <p className="font-semibold text-orange-700">💵 <24 hours before</p>
-                    <p className="text-xs">PENALTY - 2-hour cancellation fee (rest refunded)</p>
+                    <p className="font-semibold text-yellow-700">⚠️ 4-24 hours before</p>
+                    <p className="text-xs">WARNING - Worker gets 50% cancellation pay</p>
                   </div>
 
                   <div>
-                    <p className="font-semibold text-red-700">🚫 Worker no-show</p>
-                    <p className="text-xs">FULL REFUND - Report immediately for refund + worker suspension</p>
+                    <p className="font-semibold text-orange-700">💵 &lt;4 hours before</p>
+                    <p className="text-xs">PENALTY - Worker gets 100% shift pay + $25 inconvenience fee</p>
+                  </div>
+
+                  <div>
+                    <p className="font-semibold text-red-700">🚫 No-show (employer doesn't show up)</p>
+                    <p className="text-xs">SEVERE - Worker gets 100% pay + $50 + reputation hit</p>
                   </div>
 
                   <div>
                     <p className="font-semibold text-purple-700">🏥 Emergency</p>
-                    <p className="text-xs">FULL REFUND - With documentation (power outage, health dept closure, etc.)</p>
+                    <p className="text-xs">Contact support immediately - case-by-case review</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* 2. Worker Cancellation Policy (Detailed) */}
+          {/* 2. Worker Cancellation Policy */}
           <div>
-            <h2 className="text-2xl font-semibold text-teal-700 mb-3">2. Worker Cancellation Policy (Detailed)</h2>
+            <h2 className="text-2xl font-semibold text-teal-700 mb-3">2. Worker Cancellation Policy</h2>
             
-            <p className="mb-4">
-              You're an independent contractor with the freedom to choose your shifts. But once you accept a shift, a venue is counting on you. Here's our policy:
+            <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">2.1 Free Cancellation Window</h3>
+            <p className="mb-3">
+              <strong>More than 24 hours before shift start:</strong> Cancel anytime, no questions asked, no penalty. We understand plans change!
             </p>
 
-            <div className="space-y-4">
-              {/* Free Cancellation */}
-              <div className="bg-green-50 p-6 rounded border border-green-400">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">✅</span>
-                  <p className="text-xl font-semibold text-green-800">Free Cancellation (>24 hours notice)</p>
-                </div>
-                
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-semibold text-sm">When it applies:</p>
-                    <ul className="list-disc pl-6 text-sm space-y-1 mt-1">
-                      <li>You cancel MORE than 24 hours before shift start time</li>
-                      <li>Example: Shift is Friday at 5pm → Cancel before Thursday 5pm = FREE</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <p className="font-semibold text-sm">What happens:</p>
-                    <ul className="list-disc pl-6 text-sm space-y-1 mt-1">
-                      <li>No penalty, no fees, no impact on your rating</li>
-                      <li>Shift immediately goes back to the marketplace</li>
-                      <li>Another worker can claim it</li>
-                      <li>Venue is notified (gives them time to find coverage)</li>
-                      <li>You can cancel as many times as you want with >24hr notice</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-white p-3 rounded">
-                    <p className="text-xs font-semibold mb-1">💡 Pro tip:</p>
-                    <p className="text-xs">If something comes up, cancel ASAP so another worker can grab the shift. The sooner you cancel, the better for everyone.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Warning Zone */}
-              <div className="bg-yellow-50 p-6 rounded border border-yellow-400">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">⚠️</span>
-                  <p className="text-xl font-semibold text-yellow-800">Warning Zone (2-24 hours notice)</p>
-                </div>
-                
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-semibold text-sm">When it applies:</p>
-                    <ul className="list-disc pl-6 text-sm space-y-1 mt-1">
-                      <li>You cancel between 2-24 hours before shift start</li>
-                      <li>Example: Shift is Friday at 5pm → Cancel between Thursday 5pm and Friday 3pm</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <p className="font-semibold text-sm">What happens:</p>
-                    <ul className="list-disc pl-6 text-sm space-y-1 mt-1">
-                      <li><strong>No financial penalty</strong></li>
-                      <li>But: You receive a <strong>warning</strong></li>
-                      <li>3 warnings in 90 days = 7-day suspension</li>
-                      <li>Shift goes back to marketplace (but harder to fill at this point)</li>
-                      <li>Venue is frustrated (may rate you lower if you've worked for them before)</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-white p-3 rounded">
-                    <p className="text-xs font-semibold mb-1">Why this matters:</p>
-                    <p className="text-xs">Cancelling with <24 hours notice is really hard on venues. They're counting on you and may not find coverage in time. We don't charge a fee, but repeated last-minute cancellations will impact your ability to work.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Penalty Zone */}
-              <div className="bg-orange-50 p-6 rounded border border-orange-400">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">💵</span>
-                  <p className="text-xl font-semibold text-orange-800">Penalty Zone (<2 hours notice)</p>
-                </div>
-                
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-semibold text-sm">When it applies:</p>
-                    <ul className="list-disc pl-6 text-sm space-y-1 mt-1">
-                      <li>You cancel LESS than 2 hours before shift start</li>
-                      <li>Example: Shift is Friday at 5pm → Cancel after Friday 3pm</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <p className="font-semibold text-sm">What happens:</p>
-                    <ul className="list-disc pl-6 text-sm space-y-1 mt-1">
-                      <li><strong>Cancellation fee charged:</strong> $25 OR 1 hour of shift pay (whichever is GREATER)</li>
-                      <li>Example: $20/hr shift = $25 fee | $30/hr shift = $30 fee | $18/hr shift = $25 fee (minimum)</li>
-                      <li>Fee charged to your saved payment method</li>
-                      <li>Shift goes back to marketplace (very hard to fill)</li>
-                      <li>You also receive a warning (counts toward 3-strike rule)</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-white p-3 rounded">
-                    <p className="text-xs font-semibold mb-1">Why we charge a fee:</p>
-                    <p className="text-xs">Cancelling <2 hours before puts venues in an impossible position. They can't find coverage, can't serve all their customers, and lose money. The fee compensates them for this disruption.</p>
-                  </div>
-
-                  <div>
-                    <p className="font-semibold text-sm">How the fee is used:</p>
-                    <ul className="list-disc pl-6 text-sm space-y-1 mt-1">
-                      <li>50% goes to the venue (partial compensation for disruption)</li>
-                      <li>50% kept by SwipeAShift (administrative costs, not profit)</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              {/* No-Show */}
-              <div className="bg-red-50 p-6 rounded border border-red-500">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">🚫</span>
-                  <p className="text-xl font-semibold text-red-800">No-Show (Zero Tolerance)</p>
-                </div>
-                
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-semibold text-sm">What counts as a no-show:</p>
-                    <ul className="list-disc pl-6 text-sm space-y-1 mt-1">
-                      <li>You don't show up at all</li>
-                      <li>You show up more than 30 minutes late without calling ahead</li>
-                      <li>You leave mid-shift without permission (except emergencies)</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-white p-4 rounded border-2 border-red-400">
-                    <p className="font-semibold text-red-800 mb-2">FIRST NO-SHOW:</p>
-                    <ul className="list-disc pl-6 text-sm space-y-1">
-                      <li><strong>Immediate 30-day suspension</strong> (account frozen)</li>
-                      <li><strong>$50 penalty</strong> OR full shift value (whichever is LESS)</li>
-                      <li>Example: 6-hour shift at $20/hr = $120 total, but fee capped at $50</li>
-                      <li>Must complete a <strong>re-training module</strong> to reactivate</li>
-                      <li>Venue gets full refund</li>
-                      <li>Your rating takes a major hit</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-white p-4 rounded border-2 border-red-600">
-                    <p className="font-semibold text-red-800 mb-2">SECOND NO-SHOW:</p>
-                    <ul className="list-disc pl-6 text-sm space-y-1">
-                      <li><strong>PERMANENT ACCOUNT TERMINATION</strong></li>
-                      <li>No exceptions, no appeals</li>
-                      <li>You're banned from SwipeAShift forever</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-white p-3 rounded">
-                    <p className="text-xs font-semibold mb-1">Why zero tolerance:</p>
-                    <p className="text-xs">No-shows devastate venues. They've planned their evening around you being there. When you don't show up, they can't serve customers, staff members have to cover (ruining their night too), and the venue loses money. We take this extremely seriously.</p>
-                  </div>
-
-                  <div>
-                    <p className="font-semibold text-sm text-red-800">⚠️ CRITICAL: If you're going to be late or can't make it, CALL THE VENUE IMMEDIATELY</p>
-                    <p className="text-xs mt-1">Even if you're only going to be 10 minutes late, call ahead. Communication makes all the difference. A no-call/no-show is unforgivable.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Emergency Exceptions */}
-              <div className="bg-purple-50 p-6 rounded border border-purple-400">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">🏥</span>
-                  <p className="text-xl font-semibold text-purple-800">Emergency Exceptions (Documented)</p>
-                </div>
-                
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-semibold text-sm">We understand true emergencies happen. These are EXCUSED if you provide documentation within 24 hours:</p>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-3">
-                    <div className="bg-white p-3 rounded border border-purple-300">
-                      <p className="font-semibold text-xs text-purple-800 mb-2">✅ EXCUSED EMERGENCIES:</p>
-                      <ul className="list-disc pl-4 text-xs space-y-1">
-                        <li><strong>Hospitalization:</strong> ER records, admission papers</li>
-                        <li><strong>Death in immediate family:</strong> Obituary, funeral notice</li>
-                        <li><strong>Car accident en route:</strong> Police report, tow receipt</li>
-                        <li><strong>Natural disaster:</strong> Blizzard, flood, power outage (news verification)</li>
-                        <li><strong>Positive COVID test:</strong> Lab results from past 24 hours</li>
-                        <li><strong>Jury duty:</strong> Summons with date/time</li>
-                        <li><strong>Court appearance:</strong> Subpoena or court notice</li>
-                      </ul>
-                    </div>
-
-                    <div className="bg-white p-3 rounded border border-red-300">
-                      <p className="font-semibold text-xs text-red-800 mb-2">❌ NOT EXCUSED:</p>
-                      <ul className="list-disc pl-4 text-xs space-y-1">
-                        <li>"Car broke down" (without tow receipt/repair invoice)</li>
-                        <li>"Felt sick" (without doctor visit/urgent care)</li>
-                        <li>"Family issue" (without documentation)</li>
-                        <li>"Forgot" (never acceptable)</li>
-                        <li>"Another shift came up" (breach of commitment)</li>
-                        <li>"Overslept" (set multiple alarms)</li>
-                        <li>"Traffic" (leave early)</li>
-                        <li>"Childcare fell through" (have a backup plan)</li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className="font-semibold text-sm">How to get emergency exception:</p>
-                    <ol className="list-decimal pl-6 text-sm space-y-1 mt-1">
-                      <li><strong>Call the venue immediately</strong> (explain situation, apologize)</li>
-                      <li><strong>Email SwipeAShift support</strong> at support@swipeashift.com within 24 hours</li>
-                      <li><strong>Attach documentation</strong> (photo of ER discharge papers, police report, etc.)</li>
-                      <li><strong>We review</strong> (usually same business day)</li>
-                      <li><strong>If approved:</strong> Penalty waived, suspension lifted, venue refunded</li>
-                      <li><strong>If denied:</strong> Standard penalties apply</li>
-                    </ol>
-                  </div>
-
-                  <div className="bg-white p-3 rounded">
-                    <p className="text-xs font-semibold mb-1">💡 Pro tip:</p>
-                    <p className="text-xs">Take a photo of any documentation immediately (ER discharge papers, tow receipt, etc.). The faster you can provide proof, the faster we can resolve it.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* 3. Venue Cancellation Policy (Detailed) */}
-          <div>
-            <h2 className="text-2xl font-semibold text-teal-700 mb-3">3. Venue Cancellation Policy (Detailed)</h2>
-            
-            <p className="mb-4">
-              We understand that business needs change. Here's how cancellations work from the venue side:
+            <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">2.2 Warning Zone (2-24 hours)</h3>
+            <p className="mb-3">
+              <strong>Between 2-24 hours before shift:</strong> You can cancel, but you'll receive a warning. After <strong>3 warnings in 90 days</strong>, your account may be temporarily suspended (7-30 days depending on severity).
+            </p>
+            <p className="mb-3 text-sm italic">
+              Why? Late cancellations make it hard for employers to find replacements and hurt your reputation.
             </p>
 
-            <div className="space-y-4">
-              {/* Free Cancellation */}
-              <div className="bg-green-50 p-6 rounded border border-green-400">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">✅</span>
-                  <p className="text-xl font-semibold text-green-800">Free Cancellation (>24 hours notice)</p>
-                </div>
-                
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-semibold text-sm">When it applies:</p>
-                    <ul className="list-disc pl-6 text-sm space-y-1 mt-1">
-                      <li>You cancel MORE than 24 hours before shift start</li>
-                      <li>Example: Shift is Friday at 5pm → Cancel before Thursday 5pm</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <p className="font-semibold text-sm">What happens:</p>
-                    <ul className="list-disc pl-6 text-sm space-y-1 mt-1">
-                      <li><strong>Full refund</strong> (100% back to your card within 5-7 business days)</li>
-                      <li>Worker is immediately notified</li>
-                      <li>Shift removed from worker's schedule</li>
-                      <li>No penalty, no impact on your account</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-white p-3 rounded">
-                    <p className="text-xs font-semibold mb-1">Note for venues:</p>
-                    <p className="text-xs">While there's no penalty, repeated last-minute cancellations may impact your venue rating. Workers can rate venues, and frequent cancellations hurt your reputation.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Penalty Zone */}
-              <div className="bg-orange-50 p-6 rounded border border-orange-400">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">💵</span>
-                  <p className="text-xl font-semibold text-orange-800">Cancellation Fee (<24 hours notice)</p>
-                </div>
-                
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-semibold text-sm">When it applies:</p>
-                    <ul className="list-disc pl-6 text-sm space-y-1 mt-1">
-                      <li>You cancel LESS than 24 hours before shift start</li>
-                      <li>Example: Shift is Friday at 5pm → Cancel after Thursday 5pm</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <p className="font-semibold text-sm">What happens:</p>
-                    <ul className="list-disc pl-6 text-sm space-y-1 mt-1">
-                      <li><strong>2-hour cancellation fee</strong> (you pay for 2 hours, rest is refunded)</li>
-                      <li>Example: 6-hour shift at $24/hr = $144 total</li>
-                      <li>You're refunded: $96 (4 hours)</li>
-                      <li>You pay: $48 (2-hour fee)</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <p className="font-semibold text-sm">Where the fee goes:</p>
-                    <ul className="list-disc pl-6 text-sm space-y-1 mt-1">
-                      <li>100% goes to the worker (they blocked time for you)</li>
-                      <li>Worker is notified and receives the 2-hour payment</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-white p-3 rounded">
-                    <p className="text-xs font-semibold mb-1">Why we charge this fee:</p>
-                    <p className="text-xs">Workers turn down other opportunities when they accept your shift. Cancelling last-minute means they lose that income and may not find another shift. The 2-hour fee partially compensates them.</p>
-                  </div>
-
-                  <div>
-                    <p className="font-semibold text-sm text-orange-800">⚠️ Repeated last-minute cancellations:</p>
-                    <p className="text-xs mt-1">Venues that frequently cancel with <24 hours notice may face account review and possible restrictions on posting shifts.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Worker No-Show */}
-              <div className="bg-red-50 p-6 rounded border border-red-400">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">🚫</span>
-                  <p className="text-xl font-semibold text-red-800">Worker No-Show (Full Refund)</p>
-                </div>
-                
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-semibold text-sm">If a worker doesn't show up:</p>
-                    <ol className="list-decimal pl-6 text-sm space-y-1 mt-1">
-                      <li><strong>Contact SwipeAShift support immediately:</strong> support@swipeashift.com or call our support line</li>
-                      <li><strong>Provide shift details:</strong> Shift ID, worker name, scheduled time</li>
-                      <li><strong>Confirm no-show:</strong> Worker didn't show up, didn't call, no communication</li>
-                      <li><strong>We process refund:</strong> Full refund within 1-2 business days</li>
-                      <li><strong>Worker faces consequences:</strong> 30-day suspension + $50 penalty (or permanent ban if second offense)</li>
-                    </ol>
-                  </div>
-
-                  <div className="bg-white p-3 rounded">
-                    <p className="text-xs font-semibold mb-1">⏱️ Grace period:</p>
-                    <p className="text-xs">Please allow 15 minutes past shift start before reporting a no-show (traffic, parking issues happen). But if they haven't called or texted by then, it's a no-show.</p>
-                  </div>
-
-                  <div>
-                    <p className="font-semibold text-sm">What if the worker shows up late:</p>
-                    <ul className="list-disc pl-6 text-sm space-y-1 mt-1">
-                      <li><strong>Called ahead, <30 minutes late:</strong> Not a no-show (but you can rate them lower)</li>
-                      <li><strong>Didn't call, <30 minutes late:</strong> Your choice to accept them or report as no-show</li>
-                      <li><strong>>30 minutes late, no call:</strong> Definitely a no-show</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              {/* Emergency Exceptions */}
-              <div className="bg-purple-50 p-6 rounded border border-purple-400">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">🏥</span>
-                  <p className="text-xl font-semibold text-purple-800">Emergency Exceptions (Documented)</p>
-                </div>
-                
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-semibold text-sm">You can cancel without penalty (full refund) if:</p>
-                    <ul className="list-disc pl-6 text-sm space-y-1 mt-1">
-                      <li><strong>Natural disaster:</strong> Blizzard, flood, hurricane forces closure</li>
-                      <li><strong>Power outage:</strong> Utility confirms outage preventing operations</li>
-                      <li><strong>Health department closure:</strong> Inspection forces temporary closure</li>
-                      <li><strong>Fire/flood damage:</strong> Emergency at venue prevents opening</li>
-                      <li><strong>Mandated closure:</strong> Government order (pandemic lockdown, emergency)</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <p className="font-semibold text-sm">How to get emergency exception:</p>
-                    <ol className="list-decimal pl-6 text-sm space-y-1 mt-1">
-                      <li><strong>Contact worker immediately</strong> (text/call to inform them)</li>
-                      <li><strong>Email SwipeAShift support:</strong> support@swipeashift.com</li>
-                      <li><strong>Provide documentation:</strong> News article, utility notice, health dept letter, etc.</li>
-                      <li><strong>We review and approve:</strong> Usually same day</li>
-                      <li><strong>Full refund processed:</strong> Within 1-2 business days</li>
-                      <li><strong>Worker compensated:</strong> We may provide a partial payment to worker from SwipeAShift (not you)</li>
-                    </ol>
-                  </div>
-
-                  <div className="bg-white p-3 rounded border border-purple-300">
-                    <p className="font-semibold text-xs text-purple-800 mb-1">❌ NOT EXCUSED:</p>
-                    <ul className="list-disc pl-4 text-xs space-y-1">
-                      <li>"Business was slower than expected" (not an emergency)</li>
-                      <li>"We had enough staff" (planning issue)</li>
-                      <li>"Owner changed their mind" (not an emergency)</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* 4. Payment Approval Process */}
-          <div>
-            <h2 className="text-2xl font-semibold text-teal-700 mb-3">4. Payment Approval Process (48-Hour Auto-Approve)</h2>
-            
-            <p className="mb-4">
-              After a shift completes, venues have 48 hours to review and approve (or dispute) the work. Here's how it works:
+            <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">2.3 Penalty Zone (Less than 2 hours)</h3>
+            <p className="mb-3">
+              <strong>Less than 2 hours before shift:</strong> You'll be charged a cancellation fee:
+            </p>
+            <ul className="list-disc list-inside space-y-1 ml-4 mb-3">
+              <li><strong>$25 flat fee</strong>, OR</li>
+              <li><strong>1 hour of your agreed shift rate</strong> (whichever is greater)</li>
+            </ul>
+            <p className="mb-3 text-sm">
+              <em>Example: If you were getting paid $30/hour, you'd pay $30. If you were getting $15/hour, you'd pay $25.</em>
             </p>
 
-            <div className="bg-blue-50 p-6 rounded border border-blue-300 space-y-4">
-              <div>
-                <p className="font-semibold text-blue-900 mb-2">Timeline:</p>
-                
-                <div className="space-y-3">
-                  <div className="bg-white p-3 rounded">
-                    <p className="font-semibold text-sm">⏰ Shift completes (worker clocks out)</p>
-                    <p className="text-xs mt-1">48-hour review window begins immediately</p>
-                  </div>
+            <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">2.4 No-Show (You Don't Show Up)</h3>
+            <p className="mb-3">
+              <strong>If you don't show up and don't cancel:</strong>
+            </p>
+            <ul className="list-disc list-inside space-y-1 ml-4 mb-3">
+              <li><strong>$50 penalty</strong> charged to your account</li>
+              <li><strong>30-day suspension</strong> from the platform</li>
+              <li>Permanent mark on your reliability score</li>
+              <li>May result in permanent ban for repeat offenses</li>
+            </ul>
 
-                  <div className="bg-white p-3 rounded">
-                    <p className="font-semibold text-sm">🎯 Within 48 hours - Venue approves:</p>
-                    <ul className="list-disc pl-4 text-xs space-y-1 mt-1">
-                      <li>Click "Approve Shift" in dashboard</li>
-                      <li>Optionally rate worker and leave feedback</li>
-                      <li>Payment releases immediately to worker</li>
-                      <li>Worker receives funds in 1-2 business days</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-white p-3 rounded">
-                    <p className="font-semibold text-sm">⚠️ Within 48 hours - Venue disputes:</p>
-                    <ul className="list-disc pl-4 text-xs space-y-1 mt-1">
-                      <li>Click "Dispute Shift" in dashboard</li>
-                      <li>Select reason: No-show / Left early / Performance issue / Other</li>
-                      <li>Provide details and evidence (timestamps, photos, witness statements)</li>
-                      <li>SwipeAShift support reviews (typically 24-48 hours)</li>
-                      <li>We mediate and make final decision</li>
-                      <li>Payment held until resolved</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-green-100 p-3 rounded border border-green-400">
-                    <p className="font-semibold text-sm text-green-800">✅ 48 hours pass - Auto-approve:</p>
-                    <ul className="list-disc pl-4 text-xs space-y-1 mt-1">
-                      <li>If venue doesn't approve OR dispute within 48 hours</li>
-                      <li>Shift is <strong>automatically approved</strong></li>
-                      <li>Payment releases immediately to worker</li>
-                      <li>Venue can no longer dispute</li>
-                      <li><strong>This protects workers from delayed payment</strong></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <p className="font-semibold text-blue-900 mb-2">Dispute resolution:</p>
-                
-                <div className="space-y-2">
-                  <div className="bg-white p-3 rounded">
-                    <p className="font-semibold text-xs">If venue disputes no-show:</p>
-                    <p className="text-xs mt-1">We check: Did worker clock in? Any GPS/photo verification? Did venue report immediately? → If confirmed no-show, venue gets full refund + worker suspended.</p>
-                  </div>
-
-                  <div className="bg-white p-3 rounded">
-                    <p className="font-semibold text-xs">If venue disputes "left early":</p>
-                    <p className="text-xs mt-1">We check: Clock-out time vs shift end time. → If worker left >1 hour early without permission, partial refund to venue. If <1 hour or had permission, payment to worker stands.</p>
-                  </div>
-
-                  <div className="bg-white p-3 rounded">
-                    <p className="font-semibold text-xs">If venue disputes "poor performance":</p>
-                    <p className="text-xs mt-1">This is NOT grounds for non-payment unless worker violated safety rules, was intoxicated, or committed misconduct. Poor performance = low rating, not refund. Workers still get paid.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-yellow-50 p-3 rounded border border-yellow-400">
-                <p className="font-semibold text-yellow-800 mb-1">⚠️ Important for venues:</p>
-                <p className="text-xs">You have 48 hours to dispute. After auto-approve, you can't get a refund even if you later discover an issue. Review shifts promptly!</p>
-              </div>
-            </div>
+            <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">2.5 Emergencies & Special Circumstances</h3>
+            <p className="mb-3">
+              We understand emergencies happen:
+            </p>
+            <ul className="list-disc list-inside space-y-1 ml-4 mb-3">
+              <li>Medical emergencies (hospital visit, sudden illness)</li>
+              <li>Family emergencies (death, accident)</li>
+              <li>Car accidents or breakdowns</li>
+              <li>Natural disasters or extreme weather</li>
+            </ul>
+            <p className="mb-3">
+              <strong>What to do:</strong> Contact our support team ASAP with documentation (photo of hospital bracelet, police report, tow receipt, etc.). We'll review your case and may waive penalties.
+            </p>
+            <p className="text-sm italic">
+              Note: "I slept through my alarm" or "I forgot" are NOT emergencies.
+            </p>
           </div>
 
-          {/* 5. Refund Processing Times */}
+          {/* 3. Employer Cancellation Policy */}
           <div>
-            <h2 className="text-2xl font-semibold text-teal-700 mb-3">5. Refund Processing Times</h2>
+            <h2 className="text-2xl font-semibold text-teal-700 mb-3">3. Employer Cancellation Policy</h2>
             
-            <div className="bg-gray-50 p-4 rounded">
-              <div className="space-y-3 text-sm">
-                <div className="flex justify-between items-center pb-2 border-b border-gray-300">
-                  <span><strong>Venue cancels >24hrs:</strong></span>
-                  <span className="text-green-700 font-semibold">5-7 business days (full refund)</span>
-                </div>
+            <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">3.1 Free Cancellation Window</h3>
+            <p className="mb-3">
+              <strong>More than 24 hours before shift start:</strong> Cancel anytime, full refund (minus SwipeAShift processing fee of 3%).
+            </p>
 
-                <div className="flex justify-between items-center pb-2 border-b border-gray-300">
-                  <span><strong>Venue cancels <24hrs:</strong></span>
-                  <span className="text-orange-700 font-semibold">5-7 business days (partial refund, minus 2-hr fee)</span>
-                </div>
+            <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">3.2 Warning Zone (4-24 hours)</h3>
+            <p className="mb-3">
+              <strong>Between 4-24 hours before shift:</strong> You can cancel, but the worker receives <strong>50% of the agreed shift pay</strong> as cancellation compensation. The remaining 50% is refunded to you (minus fees).
+            </p>
+            <p className="mb-3 text-sm italic">
+              Why? Workers may have turned down other shifts or made plans based on your booking.
+            </p>
 
-                <div className="flex justify-between items-center pb-2 border-b border-gray-300">
-                  <span><strong>Worker no-show:</strong></span>
-                  <span className="text-green-700 font-semibold">1-2 business days (full refund)</span>
-                </div>
+            <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">3.3 Penalty Zone (Less than 4 hours)</h3>
+            <p className="mb-3">
+              <strong>Less than 4 hours before shift:</strong> The worker receives:
+            </p>
+            <ul className="list-disc list-inside space-y-1 ml-4 mb-3">
+              <li><strong>100% of the agreed shift pay</strong></li>
+              <li><strong>Plus a $25 inconvenience fee</strong></li>
+            </ul>
+            <p className="mb-3 text-sm">
+              <em>You are charged for the full shift + $25. No refund.</em>
+            </p>
 
-                <div className="flex justify-between items-center pb-2 border-b border-gray-300">
-                  <span><strong>Disputed shift (resolved in venue's favor):</strong></span>
-                  <span className="text-green-700 font-semibold">1-2 business days after resolution</span>
-                </div>
+            <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">3.4 No-Show (Employer Doesn't Show Up)</h3>
+            <p className="mb-3">
+              <strong>If the worker shows up and you're not there or the shift is unavailable:</strong>
+            </p>
+            <ul className="list-disc list-inside space-y-1 ml-4 mb-3">
+              <li>Worker receives <strong>100% of shift pay</strong></li>
+              <li>Worker receives <strong>$50 inconvenience fee</strong></li>
+              <li>Your employer account gets a <strong>serious reputation hit</strong></li>
+              <li>Repeat offenses may result in <strong>permanent ban</strong></li>
+            </ul>
 
-                <div className="flex justify-between items-center pb-2">
-                  <span><strong>Emergency exception:</strong></span>
-                  <span className="text-green-700 font-semibold">1-2 business days after approval</span>
-                </div>
-              </div>
-            </div>
+            <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">3.5 Emergencies & Special Circumstances</h3>
+            <p className="mb-3">
+              Valid reasons for emergency cancellation:
+            </p>
+            <ul className="list-disc list-inside space-y-1 ml-4 mb-3">
+              <li>Restaurant closed by health inspector</li>
+              <li>Power outage or equipment failure</li>
+              <li>Natural disasters or extreme weather</li>
+              <li>Death or serious injury of staff/owner</li>
+            </ul>
+            <p className="mb-3">
+              <strong>What to do:</strong> Contact our support team immediately with documentation. We'll review and may waive or reduce penalties.
+            </p>
+          </div>
 
-            <p className="text-xs text-gray-600 mt-3">
-              <em>Note: Refund times depend on your bank/card issuer. SwipeAShift processes refunds immediately, but your bank may take 3-7 additional days to post the credit.</em>
+          {/* 4. Dispute Resolution */}
+          <div>
+            <h2 className="text-2xl font-semibold text-teal-700 mb-3">4. Dispute Resolution</h2>
+            
+            <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">4.1 How to File a Dispute</h3>
+            <p className="mb-3">
+              If you believe a cancellation fee was unfair:
+            </p>
+            <ol className="list-decimal list-inside space-y-2 ml-4 mb-3">
+              <li>Email <a href="mailto:disputes@swipeashift.com" className="text-teal-700 underline">disputes@swipeashift.com</a> within <strong>48 hours</strong> of the incident</li>
+              <li>Include: Your name, shift ID, date/time, reason for dispute, and any supporting evidence</li>
+              <li>We'll review within 2-3 business days</li>
+              <li>Decision is final unless new evidence is provided</li>
+            </ol>
+
+            <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">4.2 We Mediate Fairly</h3>
+            <p className="mb-3">
+              SwipeAShift acts as a neutral mediator. We'll review:
+            </p>
+            <ul className="list-disc list-inside space-y-1 ml-4 mb-3">
+              <li>Both parties' stories</li>
+              <li>Chat/message history</li>
+              <li>Past behavior and reliability scores</li>
+              <li>Documentation provided</li>
+            </ul>
+            <p className="mb-3">
+              Our goal: <strong>Fair outcomes that maintain trust in the platform.</strong>
+            </p>
+          </div>
+
+          {/* 5. Refund Processing */}
+          <div>
+            <h2 className="text-2xl font-semibold text-teal-700 mb-3">5. Refund Processing</h2>
+            
+            <p className="mb-3">
+              <strong>Timeline:</strong> Refunds are processed immediately upon cancellation approval. However, it may take 3-7 business days for your bank to post the credit.
+            </p>
+
+            <p className="mb-3">
+              <strong>Refund Method:</strong> Refunds go back to the original payment method (card, bank account, etc.).
+            </p>
+
+            <p className="mb-3 text-sm">
+              <em>Note: SwipeAShift processes refunds immediately, but your bank may take 3-7 additional days to post the credit.</em>
             </p>
           </div>
 
