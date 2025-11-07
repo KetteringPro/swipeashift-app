@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { createClient } from "@/lib/supabase/server";
 
 async function seedVenueAndShift() {
+  const supabase = await createClient();
   try {
     // Find employer user (Christy Kettering)
     const { data: employerData, error: employerError } = await supabase

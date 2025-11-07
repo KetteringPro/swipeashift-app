@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { createClient } from "@/lib/supabase/server";
 
 async function readShiftsWithVenues() {
+  const supabase = await createClient();
   console.log("🔍 Fetching open shifts with venue info...");
 
   const { data, error } = await supabase

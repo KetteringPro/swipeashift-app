@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { createClient } from "@/lib/supabase/server";
 
 async function seedUser() {
+  const supabase = await createClient();
   console.log("🌱 Seeding test user...");
 
   const { data, error } = await supabase

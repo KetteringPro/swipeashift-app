@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { createClient } from "@/lib/supabase/server";
 
 async function seedVenueAndShift() {
+  const supabase = await createClient();
   console.log("🌊 Seeding test venues, workers, and shifts...");
 
   // Step 1: Get test user (the one you just inserted)
