@@ -1,6 +1,6 @@
 // scripts/matchShiftsToWorkers.ts
 import "dotenv/config";
-import { supabaseServer } from "../lib/supabaseServer";
+import { createClient } from "@/lib/supabase/server";
 
 /**
  * ShoreStaff Match Engine (Worker → Shifts)
