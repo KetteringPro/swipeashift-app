@@ -93,7 +93,7 @@ export default function Navigation() {
               Login
             </Link>
             <Link 
-              href="/signup" 
+              href="/get-started" 
               className="bg-white text-teal-600 px-4 py-2 rounded-lg hover:bg-teal-50 transition font-semibold"
             >
               Sign Up
