@@ -1,14 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@supabase/supabase-js'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+import { createClient } from '@/lib/supabase/client'
 
 export default function BasicInfo({ nextStep }: { nextStep: () => void }) {
+  const supabase = createClient()
   const [user, setUser] = useState<any>(null)
   const [restaurants, setRestaurants] = useState<any[]>([])
   const [form, setForm] = useState({
