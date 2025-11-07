@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { supabase } from "../lib/supabaseClient";
+import { createClient } from "@/lib/supabase/server";
 
 async function testConnection() {
   const supabase = await createClient();
