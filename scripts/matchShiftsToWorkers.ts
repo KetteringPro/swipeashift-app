@@ -10,7 +10,6 @@ import { createClient } from "@/lib/supabase/server";
 async function matchShiftsToWorkers() {
   const supabase = await createClient();
   // Create the Supabase client
-  const supabase = await createClient();
 
   // 1) Load OPEN shifts + venue info
   const { data: shifts, error: shErr } = await supabase
