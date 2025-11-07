@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { supabaseServer } from "../lib/supabaseServer";
+import { createClient } from "@/lib/supabase/server";
 
 async function seedAvailability() {
   console.log("🌅 Seeding worker availability...");
@@ -13,7 +13,7 @@ async function seedAvailability() {
   ];
 
   for (const worker of workers) {
-    const { data: user, error: userError } = await supabaseServer
+    const { data: user, error: userError } = await supabase
       .from("users")
       .select("id, email")
       .eq("email", worker.email)
@@ -33,7 +33,7 @@ async function seedAvailability() {
       end_time: worker.schedule.end,
     }));
 
-    const { error: insertError } = await supabaseServer
+    const { error: insertError } = await supabase
       .from("availability")
       .insert(availabilityRecords);
 

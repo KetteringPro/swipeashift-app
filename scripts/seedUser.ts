@@ -1,10 +1,10 @@
 import 'dotenv/config';
-import { supabaseServer } from "../lib/supabaseServer";
+import { createClient } from "@/lib/supabase/server";
 
 async function seedUser() {
   console.log("🌱 Seeding test user...");
 
-  const { data, error } = await supabaseServer
+  const { data, error } = await supabase
     .from("users")
     .insert([
       {

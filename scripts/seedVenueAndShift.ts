@@ -1,11 +1,11 @@
 import 'dotenv/config';
-import { supabaseServer } from "../lib/supabaseServer";
+import { createClient } from "@/lib/supabase/server";
 
 async function seedVenueAndShift() {
   console.log("🌊 Seeding test venues, workers, and shifts...");
 
   // Step 1: Get test user (the one you just inserted)
-  const { data: userData, error: userError } = await supabaseServer
+  const { data: userData, error: userError } = await supabase
     .from("users")
     .select("id, email")
     .eq("email", "testuser@shorestaff.app")
@@ -41,7 +41,7 @@ async function seedVenueAndShift() {
     },
   ];
 
-  const { data: venueData, error: venueError } = await supabaseServer
+  const { data: venueData, error: venueError } = await supabase
     .from("venues")
     .insert(venuesToInsert)
     .select();
@@ -89,14 +89,14 @@ async function seedVenueAndShift() {
 
   // Insert workers if they do not exist already
   for (const worker of workersToInsert) {
-    const { data: existingWorker, error: existingWorkerError } = await supabaseServer
+    const { data: existingWorker, error: existingWorkerError } = await supabase
       .from("workers")
       .select("id")
       .eq("email", worker.email)
       .single();
 
     if (!existingWorker && !existingWorkerError) {
-      const { error: insertError } = await supabaseServer
+      const { error: insertError } = await supabase
         .from("workers")
         .insert(worker);
       if (insertError) {
@@ -235,7 +235,7 @@ async function seedVenueAndShift() {
     },
   ];
 
-  const { data: shiftData, error: shiftError } = await supabaseServer
+  const { data: shiftData, error: shiftError } = await supabase
     .from("shifts")
     .insert(shiftsToInsert)
     .select();

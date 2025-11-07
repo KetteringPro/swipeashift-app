@@ -1,10 +1,10 @@
 import 'dotenv/config';
-import { supabaseServer } from "../lib/supabaseServer";
+import { createClient } from "@/lib/supabase/server";
 
 async function seedVenueAndShift() {
   try {
     // Find employer user (Christy Kettering)
-    const { data: employerData, error: employerError } = await supabaseServer
+    const { data: employerData, error: employerError } = await supabase
       .from('users')
       .select('id')
       .eq('email', 'christy.kettering@example.com')
@@ -34,7 +34,7 @@ async function seedVenueAndShift() {
       },
     ];
 
-    const { data: insertedVenues, error: venueError } = await supabaseServer
+    const { data: insertedVenues, error: venueError } = await supabase
       .from('venues')
       .insert(venuesToInsert)
       .select();
@@ -92,7 +92,7 @@ async function seedVenueAndShift() {
 
     for (const worker of workers) {
       // Insert user
-      const { data: userData, error: userError } = await supabaseServer.auth.admin.createUser({
+      const { data: userData, error: userError } = await supabase.auth.admin.createUser({
         email: worker.email,
         password: worker.password,
         email_confirm: true,
@@ -104,7 +104,7 @@ async function seedVenueAndShift() {
       }
 
       // Insert profile
-      const { data: profileData, error: profileError } = await supabaseServer
+      const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .insert({
           id: userData.user.id,
@@ -252,7 +252,7 @@ async function seedVenueAndShift() {
       },
     ];
 
-    const { data: insertedShifts, error: shiftError } = await supabaseServer
+    const { data: insertedShifts, error: shiftError } = await supabase
       .from('shifts')
       .insert(shiftsToInsert)
       .select();

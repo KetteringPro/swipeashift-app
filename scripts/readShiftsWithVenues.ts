@@ -1,10 +1,10 @@
 import 'dotenv/config';
-import { supabaseServer } from "../lib/supabaseServer";
+import { createClient } from "@/lib/supabase/server";
 
 async function readShiftsWithVenues() {
   console.log("🔍 Fetching open shifts with venue info...");
 
-  const { data, error } = await supabaseServer
+  const { data, error } = await supabase
     .from("shifts")
     .select(`
       id,
