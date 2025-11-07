@@ -54,10 +54,8 @@ export function SwipeCard({ shift, onSwipe, onSwipeComplete }: SwipeCardProps) {
     }
   }
 
-  // Format pay rate
-  const payDisplay = shift.surge_factor > 1.2 
-    ? `$${shift.pay_rate}/hr 🔥` 
-    : `$${shift.pay_rate}/hr`
+  // Format pay rate - removed surge_factor logic
+  const payDisplay = `$${shift.pay_rate}/hr`
 
   // Format date and time
   const shiftDate = new Date(shift.date)
@@ -157,11 +155,6 @@ export function SwipeCard({ shift, onSwipe, onSwipeComplete }: SwipeCardProps) {
                 <span className="text-gray-600 font-medium">Hourly Rate</span>
                 <span className="text-3xl font-bold text-green-600">{payDisplay}</span>
               </div>
-              {shift.surge_factor > 1.2 && (
-                <p className="text-sm text-orange-600 mt-1">
-                  🔥 High Demand - {((shift.surge_factor - 1) * 100).toFixed(0)}% surge bonus!
-                </p>
-              )}
               {shift.estimated_tips > 0 && (
                 <p className="text-sm text-gray-600 mt-1">
                   💰 Estimated tips: ${shift.estimated_tips}
